@@ -1,20 +1,68 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
+<div class="container p-3">
+  <div class="row">
+    <div class="col-12">
+      <form [formGroup]="form" (submit)="submit()">
+        <div class="card">
+          <div class="card-header">User Profile</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="form-group col-6">
+                <label>Name</label>
+                <input class="form-control" formControlName="name" type="text">
+                <span class="text-danger" *ngIf="form.controls['name'].touched && form.controls['name'].hasError('required')">
+                  Name is required! </span>
+              </div>
+              <div class="form-group col-6">
+                <label>Organization</label>
+                <input class="form-control" formControlName="organization" type="text">
+              </div>
+            </div>
+          </div>
+          <div class="card-header">Contact Information</div>
+          <div class="card-body" formArrayName="contacts">
+            <div class="row">
+              <div class="col-6" *ngFor="let contact of contactFormGroup.controls; let i = index;">
+                <div [formGroupName]="i" class="row">
+                  <div class="form-group col-6">
+                    <label>Type of Contact</label>
+                    <select (change)="changedFieldType(i)" class="form-control" formControlName="type" type="text">
+                      <option value="email">Email</option>
+                      <option value="phone">Phone</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-6">
+                    <label>Contact Label</label>
+                    <input class="form-control" formControlName="name" type="text">
+                    <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['name'].touched && getContactsFormGroup(i).controls['name'].hasError('required')">
+                      Label is required! </span>
+                  </div>
 
+                  <div class="form-group col-12">
+                    <label>Email/Phone No.</label>
+                    <input class="form-control" formControlName="value" type="text">
+                    <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('required')">
+                      Email/Phone no is required! </span>
+                    <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('email')">
+                      Email is not valid! </span>
+                    <span class="text-danger" *ngIf="getContactsFormGroup(i).controls['value'].touched && getContactsFormGroup(i).controls['value'].hasError('pattern')">
+                      Phone no. is not valid! </span>
+                  </div>
+                  <div class="form-group col-12 text-right">
+                    <button class="btn btn-danger" type="button" (click)="removeContact(i)"> Remove </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="col-12">
+              <button class="btn btn-primary m-1" type="button" (click)="addContact()"> Add Position </button>
+              <button class="btn btn-primary m-1" type="button" (click)="addContact()"> Add Contact </button>
+              <button class="btn btn-success m-1" [disabled]="!form.valid" type="submit"> Save User Profile </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
